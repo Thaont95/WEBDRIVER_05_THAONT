@@ -1,10 +1,12 @@
 package selenium_api;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import org.junit.Assert;
+//import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -20,6 +22,26 @@ public class Topic_02_XpathCss {
 	  driver.manage().window().maximize();
 	  driver.get("http://live.guru99.com/");
 	  }
+  
+  @Test
+  public void TC_01_CheckUrlAndTitle() {
+	  String homePageTitle = driver.getTitle();
+	  Assert.assertEquals(homePageTitle, "Home page");
+	  
+	  driver.findElement(By.xpath("//div[@class='footer']//a[contains(text(),'My Account')]")).click();
+	  
+	  driver.findElement(By.xpath("//a[@title = 'Create an Account']")).click();
+	  
+	  driver.navigate().back();	  
+	 // driver.findElement(By.xpath("//a[@class = 'back-link']")).click();
+	  String LoginPageUrl = driver.getCurrentUrl();
+	  Assert.assertEquals(LoginPageUrl, "http://live.guru99.com/index.php/customer/account/login/");
+	  
+	  driver.navigate().forward();
+	  //driver.findElement(By.xpath("//a[@title = 'Create an Account']")).click();
+	  String CreateaccountPageUrl = driver.getCurrentUrl();
+	  Assert.assertEquals(CreateaccountPageUrl, "http://live.guru99.com/index.php/customer/account/create/");
+  }
 
   @Test
   public void TC_02_Login_Empty() {
@@ -41,6 +63,8 @@ public class Topic_02_XpathCss {
 	  
 	  String passErrorMsg = driver.findElement(By.xpath("//div[@id='advice-required-entry-pass']")).getText();
 	  Assert.assertEquals("This is a required field.", passErrorMsg);
+	  
+	  
 	  
   }
   
@@ -84,8 +108,27 @@ public class Topic_02_XpathCss {
 	  
   }
   
+  @Test
+  public void TC_05_Create_Account() {
+	  driver.findElement(By.xpath("//div[@class='footer']//a[contains(text(),'My Account')]")).click();
+	  driver.findElement(By.xpath("//a[@title = 'Create an Account']")).click();
+	  driver.findElement(By.xpath("//input[@id='firstname']")).sendKeys("Nguyen");
+	  driver.findElement(By.xpath("//input[@id='lastname']")).sendKeys("Thao");
+	  driver.findElement(By.id("email_address")).sendKeys("automation" + randomEmail() + "@gmail.com");
+	  driver.findElement(By.id("password")).sendKeys("123456");
+	  driver.findElement(By.id("confirmation")).sendKeys("123456");
+	  driver.findElement(By.xpath("//button[@title = 'Register']")).click();
+	  
+	  String createaccountMsg = driver.findElement(By.xpath("//span[contains(text(),'Thank you for registering')]")).getText();
+	  Assert.assertEquals("Thank you for registering with Main Website Store.", createaccountMsg );
+	  
+	  driver.findElement(By.xpath("//header[@id=\"header\"]//span[contains(text(),'Account')]")).click();
+	  
+	  driver.findElement(By.xpath("//a[@title='Log Out']")).click();
+	  
+	  driver.navigate().to("http://live.guru99.com/index.php/");
   
-  
+  }
   
   
   @AfterClass
@@ -93,4 +136,11 @@ public class Topic_02_XpathCss {
 	  driver.quit();
   }
 
+  
+  public int randomEmail() {
+	  Random random = new Random();
+	  int number = random.nextInt(999999);
+	  return number;
+  }
+	
 }
