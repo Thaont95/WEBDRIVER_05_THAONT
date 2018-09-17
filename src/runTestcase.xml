@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Selenium Online 05" parallel="tests" thread-count="2">
+
+  <test name="Run on Firefox">
+  <parameter name="browser" value = "firefox"/>
+    <classes>
+      <class name="selenium_TestNG.TestNG_04_ParameterAndMuiltBrower"/>
+    </classes>
+  </test> <!-- Test -->
+  
+  
+  
+  
+</suite> <!-- Suite -->
